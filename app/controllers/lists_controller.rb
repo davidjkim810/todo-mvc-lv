@@ -8,16 +8,19 @@ class ListsController < ApplicationController
 
   def show
     @list = List.find(params[:id])
-    # params is a hash and has all the data that is passed by the user
-            # /lists/:id
+    @item = @list.items.build
+
   end
 
   def create
-    raise list_params.inspect
-    @list = List.new(params[:list])
-    @list.save
-
-    redirect_to list_url(@list)
+    @list = List.new(list_params)
+    if @list.save
+      redirect_to list_url(@list)
+    else
+      @lists = List.all
+      @list.name = ""
+      render :index
+    end
   end
 
 
